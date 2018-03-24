@@ -1,0 +1,32 @@
+{
+  "name": "blogrestapi",
+  "version": "1.0.0",
+  "description": "REST API for blogging application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anu0012/blogging-app-backend.git"
+  },
+  "keywords": [
+    "RESTful",
+    "API",
+    "blog"
+  ],
+  "author": "Anurag Sharma",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anu0012/blogging-app-backend/issues"
+  },
+  "homepage": "https://github.com/anu0012/blogging-app-backend#readme",
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  },
+  "dependencies": {
+    "express": "^4.15.3",
+    "mongoose": "^5.0.11"
+  }
+}
