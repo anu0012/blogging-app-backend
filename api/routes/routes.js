@@ -8,7 +8,7 @@ module.exports = function(app) {
     .post(blogAPI.create_a_blog);
 
 
-  app.route('/blogs/followers')
+  app.route('/follow/')
     .put(blogAPI.add_follower);
 
   app.route('/register')

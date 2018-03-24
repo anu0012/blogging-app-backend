@@ -72,10 +72,26 @@ exports.list_all_blogs = function(req, res) {
     if (err)
       res.send(err);
 
+    var followers_list = []
+    followers_list = req.session.user.followers;
     // loop through all blogs and check which belong to followers
-    var x= blog;
-    console.log(x[0].author);
-    res.json(blog);
+
+    if(followers_list != undefined && followers_list.length != 0){
+
+        followers_blogs = []
+        for(var i=0;i<followers_list.length;i++){
+            for(var j=0;j<blog.length;j++){
+              if(followers_list[i] == blog[j].author)
+                followers_blogs.push(blog[j]);
+            }
+        }
+
+        res.json(followers_blogs);
+    }
+    else{
+        res.json("{'blogs':'no blogs found'}");
+    }
+    
   });
  //}
 };
@@ -84,7 +100,6 @@ exports.list_all_blogs = function(req, res) {
 exports.create_a_blog = function(req, res) {
   
   req.body.author = req.session.user.username;
-
   //console.log(req.session.user.username);
   var new_blog = new Blog(req.body);
   
@@ -97,7 +112,7 @@ exports.create_a_blog = function(req, res) {
 
 
 exports.get_followers = function(req, res) {
-  Blog.findById(req.params.blogId, function(err, blog) {
+  User.findById(req.params.blogId, function(err, blog) {
     if (err)
       res.send(err);
     res.json(blog);
@@ -106,10 +121,22 @@ exports.get_followers = function(req, res) {
 
 
 exports.add_follower = function(req, res) {
-  Blog.findOneAndUpdate({_id: req.params.blogId}, req.body, {new: true}, function(err, blog) {
-    if (err)
-      res.send(err);
-    res.json(blog);
+
+  User.findById(req.session.user._id, function (err, user) {
+        if (!user) {
+            //res.json("please login");
+            res.send(err);
+        }
+        console.log(user);
+        var x = user.followers
+        x.push(req.body.username);
+        user.followers = x
+        user.save(function (err) {
+
+            if (err)
+              res.send(err);
+            res.redirect('/blogs');
+        });
   });
 };
 
