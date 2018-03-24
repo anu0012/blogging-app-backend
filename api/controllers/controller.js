@@ -74,11 +74,13 @@ exports.list_all_blogs = function(req, res) {
 
     var followers_list = []
     followers_list = req.session.user.followers;
+    console.log(req.session.user);
+
     // loop through all blogs and check which belong to followers
 
     if(followers_list != undefined && followers_list.length != 0){
 
-        followers_blogs = []
+        var followers_blogs = []
         for(var i=0;i<followers_list.length;i++){
             for(var j=0;j<blog.length;j++){
               if(followers_list[i] == blog[j].author)
@@ -135,6 +137,9 @@ exports.add_follower = function(req, res) {
 
             if (err)
               res.send(err);
+
+            req.session.userId = user._id;
+            req.session.user = user;
             res.redirect('/blogs');
         });
   });
