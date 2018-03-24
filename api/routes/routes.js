@@ -1,18 +1,19 @@
 'use strict';
 module.exports = function(app) {
-  var blogList = require('../controllers/controller');
+  var blogAPI = require('../controllers/controller');
 
-  // blogList Routes
+  // blogAPI Routes
   app.route('/blogs')
-    .get(blogList.list_all_blogs)
-    .post(blogList.create_a_blog);
+    .get(blogAPI.list_all_blogs)
+    .post(blogAPI.create_a_blog);
 
 
-  app.route('/blogs/:blogId')
-    .get(blogList.read_a_blog)
-    .put(blogList.update_a_blog)
-    .delete(blogList.delete_a_blog);
+  app.route('/blogs/followers')
+    .put(blogAPI.add_follower);
 
   app.route('/register')
-    .post(blogList.create_a_user);
+    .post(blogAPI.create_a_user);
+
+  app.route('/login')
+    .post(blogAPI.login_a_user);
 };

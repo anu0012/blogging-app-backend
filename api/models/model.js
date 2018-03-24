@@ -11,6 +11,10 @@ var BlogSchema = new Schema({
   content: {
     type: String,
     required: true
+  },
+  author:{
+    type:String,
+    default: 'buryburyzymon'
   }
 });
 

@@ -26,6 +26,10 @@ var UserSchema = new Schema({
   blogURL: {
     type: String,
     required: true,
+  },
+  followers: {
+  	type: [String],
+  	default:[]
   }
 });
 
