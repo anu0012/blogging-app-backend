@@ -73,8 +73,9 @@ exports.list_all_blogs = function(req, res) {
       res.send(err);
 
     var followers_list = []
+    if(req.session.user != undefined)
     followers_list = req.session.user.followers;
-    console.log(req.session.user);
+    //console.log(req.session.user);
 
     // loop through all blogs and check which belong to followers
 
@@ -101,6 +102,7 @@ exports.list_all_blogs = function(req, res) {
 
 exports.create_a_blog = function(req, res) {
   
+  if(req.session.user != undefined)
   req.body.author = req.session.user.username;
   //console.log(req.session.user.username);
   var new_blog = new Blog(req.body);
@@ -123,7 +125,9 @@ exports.get_followers = function(req, res) {
 
 
 exports.add_follower = function(req, res) {
-
+  if(req.session.user == undefined)
+    res.redirect('/blogs');
+  
   User.findById(req.session.user._id, function (err, user) {
         if (!user) {
             //res.json("please login");
