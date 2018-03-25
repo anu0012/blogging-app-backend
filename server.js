@@ -10,7 +10,7 @@ var express = require('express'),
 
 // mongoose instance connection url connection
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/Blogdb'); 
+mongoose.connect(process.env.MONGOLAB_URI); 
 var db = mongoose.connection;
 
 //use sessions for tracking logins
