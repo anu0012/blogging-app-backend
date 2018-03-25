@@ -24,7 +24,7 @@ var mongoose = require('mongoose'),
       } else {
         req.session.userId = user._id;
         req.session.user = user;
-        return res.redirect('/blogs');
+        return res.redirect('/feed');
       }
     });
 
@@ -46,7 +46,7 @@ exports.login_a_user = function(req, res) {
       } else {
         req.session.userId = user._id;
         req.session.user = user;
-        return res.redirect('/blogs');
+        return res.redirect('/feed');
       }
     });
   } else {
@@ -87,7 +87,7 @@ exports.create_a_blog = function(req, res) {
   
   if(req.session.user != undefined)
       req.body.author = req.session.user.username;
-    
+
   var new_blog = new Blog(req.body);
   
   new_blog.save(function(err, blog) {
@@ -116,7 +116,7 @@ exports.add_follower = function(req, res) {
 
     req.session.userId = user._id;
     req.session.user = user;
-    res.redirect('/blogs');
+    res.redirect('/feed');
     });
   });
 }

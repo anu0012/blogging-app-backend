@@ -3,12 +3,13 @@ module.exports = function(app) {
   var blogAPI = require('../controllers/controller');
 
   // blogAPI Routes
-  app.route('/blogs')
-    .get(blogAPI.list_all_blogs)
+  app.route('/blogpost')
     .post(blogAPI.create_a_blog);
 
+  app.route('/feed')
+    .get(blogAPI.list_all_blogs);
 
-  app.route('/follow/')
+  app.route('/follow')
     .put(blogAPI.add_follower);
 
   app.route('/register')
