@@ -57,6 +57,10 @@ exports.login_a_user = function(req, res) {
 };
 
 exports.list_all_blogs = function(req, res) {
+  if(!req.session.user){
+      res.send("Please Login first to see feed");
+    }
+  else{
   Blog.find({}, function(err, blog) {
     if (err)
       res.send(err);
@@ -80,6 +84,7 @@ exports.list_all_blogs = function(req, res) {
         res.send("Feed is empty.");
     }
   });
+}
 };
 
 
@@ -89,17 +94,21 @@ exports.create_a_blog = function(req, res) {
       req.body.author = req.session.user.username;
 
   var new_blog = new Blog(req.body);
-  
+  if(!req.session.user){
+      res.send("Please Login first to create blog");
+    }
+    else{
   new_blog.save(function(err, blog) {
     if (err)
       res.send(err);
     res.json(blog);
   });
+}
 };
 
 exports.add_follower = function(req, res) {
   if(req.session.user == undefined)
-        res.send('No user found');
+        res.send('Please Login to follow');
   else{
   User.findById(req.session.user._id, function (err, user) {
     if (!user) {
