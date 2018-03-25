@@ -81,7 +81,7 @@ exports.list_all_blogs = function(req, res) {
         res.json(followers_blogs);
     }
     else{
-        res.send("Feed is empty.");
+        res.send("Feed is empty. Please follow some users to see their blogs.");
     }
   });
 }
