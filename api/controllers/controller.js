@@ -4,7 +4,7 @@ var mongoose = require('mongoose'),
   Blog = mongoose.model('Blogs'),
   User = mongoose.model('Users');
 
-  exports.create_a_user = function(req, res,next) {
+  exports.create_a_user = function(req, res) {
   if (req.body.firstname && req.body.lastname &&
     req.body.username &&
     req.body.password &&
@@ -20,7 +20,7 @@ var mongoose = require('mongoose'),
 
     User.create(userData, function (error, user) {
       if (error) {
-        return next(error);
+        return res.send(error);
       } else {
         req.session.userId = user._id;
         req.session.user = user;
@@ -31,18 +31,18 @@ var mongoose = require('mongoose'),
   } else {
     var err = new Error('All fields required.');
     err.status = 400;
-    return next(err);
+    return res.send("Status: " + err.status + " Message: "+err.message);
   }
 
 };
 
-exports.login_a_user = function(req, res,next) {
+exports.login_a_user = function(req, res) {
   if (req.body.username && req.body.password) {
     User.authenticate(req.body.username, req.body.password, function (error, user) {
       if (error || !user) {
         var err = new Error('Wrong email or password.');
         err.status = 401;
-        return next(err);
+        return res.send("Status: " + err.status + " Message: "+err.message);
       } else {
         req.session.userId = user._id;
         req.session.user = user;
@@ -52,7 +52,7 @@ exports.login_a_user = function(req, res,next) {
   } else {
     var err = new Error('All fields required.');
     err.status = 400;
-    return next(err);
+    return res.send("Status: " + err.status + " Message: "+err.message);
   }
 };
 
@@ -77,7 +77,7 @@ exports.list_all_blogs = function(req, res) {
         res.json(followers_blogs);
     }
     else{
-        res.json("{'blogs':'no blogs found'}");
+        res.send("Feed is empty.");
     }
   });
 };
@@ -86,8 +86,8 @@ exports.list_all_blogs = function(req, res) {
 exports.create_a_blog = function(req, res) {
   
   if(req.session.user != undefined)
-  req.body.author = req.session.user.username;
-  //console.log(req.session.user.username);
+      req.body.author = req.session.user.username;
+    
   var new_blog = new Blog(req.body);
   
   new_blog.save(function(err, blog) {
@@ -99,27 +99,27 @@ exports.create_a_blog = function(req, res) {
 
 exports.add_follower = function(req, res) {
   if(req.session.user == undefined)
-    res.redirect('/blogs');
-
+        res.send('No user found');
+  else{
   User.findById(req.session.user._id, function (err, user) {
-        if (!user) {
-            //res.json("please login");
-            res.send(err);
-        }
-        console.log(user);
-        var x = user.followers
-        x.push(req.body.username);
-        user.followers = x
-        user.save(function (err) {
+    if (!user) {
+        res.send(err);
+    }
 
-            if (err)
-              res.send(err);
+    var x = user.followers;
+    x.push(req.body.username);
+    user.followers = x
+    user.save(function (err) {
 
-            req.session.userId = user._id;
-            req.session.user = user;
-            res.redirect('/blogs');
-        });
+    if (err)
+      res.send(err);
+
+    req.session.userId = user._id;
+    req.session.user = user;
+    res.redirect('/blogs');
+    });
   });
+}
 };
 
 
