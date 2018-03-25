@@ -5,13 +5,6 @@ var mongoose = require('mongoose'),
   User = mongoose.model('Users');
 
   exports.create_a_user = function(req, res,next) {
-  var new_user = new User(req.body);
-  //console.log(req.body);
-  //new_user.save(function(err, res) {
-  //   if (err)
-  //     res.send(err);
-  //   res.json(blog);
-  // });
   if (req.body.firstname && req.body.lastname &&
     req.body.username &&
     req.body.password &&
@@ -44,7 +37,6 @@ var mongoose = require('mongoose'),
 };
 
 exports.login_a_user = function(req, res,next) {
-  //console.log(req.body.username);
   if (req.body.username && req.body.password) {
     User.authenticate(req.body.username, req.body.password, function (error, user) {
       if (error || !user) {
@@ -62,12 +54,9 @@ exports.login_a_user = function(req, res,next) {
     err.status = 400;
     return next(err);
   }
-
 };
 
 exports.list_all_blogs = function(req, res) {
-  
-  //if(req.session.userId == user._id){
   Blog.find({}, function(err, blog) {
     if (err)
       res.send(err);
@@ -75,12 +64,9 @@ exports.list_all_blogs = function(req, res) {
     var followers_list = []
     if(req.session.user != undefined)
     followers_list = req.session.user.followers;
-    //console.log(req.session.user);
 
     // loop through all blogs and check which belong to followers
-
     if(followers_list != undefined && followers_list.length != 0){
-
         var followers_blogs = []
         for(var i=0;i<followers_list.length;i++){
             for(var j=0;j<blog.length;j++){
@@ -88,15 +74,12 @@ exports.list_all_blogs = function(req, res) {
                 followers_blogs.push(blog[j]);
             }
         }
-
         res.json(followers_blogs);
     }
     else{
         res.json("{'blogs':'no blogs found'}");
     }
-    
   });
- //}
 };
 
 
@@ -114,20 +97,10 @@ exports.create_a_blog = function(req, res) {
   });
 };
 
-
-exports.get_followers = function(req, res) {
-  User.findById(req.params.blogId, function(err, blog) {
-    if (err)
-      res.send(err);
-    res.json(blog);
-  });
-};
-
-
 exports.add_follower = function(req, res) {
   if(req.session.user == undefined)
     res.redirect('/blogs');
-  
+
   User.findById(req.session.user._id, function (err, user) {
         if (!user) {
             //res.json("please login");

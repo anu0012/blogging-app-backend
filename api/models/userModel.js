@@ -35,7 +35,6 @@ var UserSchema = new Schema({
 
 //authenticate input against database
 UserSchema.statics.authenticate = function (username, password, callback) {
-	//console.log(username);
   User.findOne({ username: username })
     .exec(function (err, user) {
       if (err) {
